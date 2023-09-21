@@ -1,0 +1,5 @@
+/home/catarina/Documents/GitHub/IC/sndfile-example-src/build/CMakeFiles/wav_cp.dir
+/home/catarina/Documents/GitHub/IC/sndfile-example-src/build/CMakeFiles/wav_hist.dir
+/home/catarina/Documents/GitHub/IC/sndfile-example-src/build/CMakeFiles/wav_dct.dir
+/home/catarina/Documents/GitHub/IC/sndfile-example-src/build/CMakeFiles/edit_cache.dir
+/home/catarina/Documents/GitHub/IC/sndfile-example-src/build/CMakeFiles/rebuild_cache.dir
