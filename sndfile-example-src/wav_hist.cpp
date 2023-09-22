@@ -42,11 +42,14 @@ int main(int argc, char *argv[]) {
 	while((nFrames = sndFile.readf(samples.data(), FRAMES_BUFFER_SIZE))) {
 		samples.resize(nFrames * sndFile.channels());
 		hist.update(samples);
+		// hist.update_mid(samples);
+		// hist.update_side(samples);
+		hist.saveHistograms();
 	}
 
 
 	//hist.dump(channel);
-	hist.dumpMono(); // MID
+	//hist.dumpMono(); // MID
 	hist.dumpSide(); // SIDE
 	return 0;
 }
