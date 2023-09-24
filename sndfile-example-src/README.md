@@ -10,19 +10,21 @@ This is an example of how you may give instructions on setting up your project l
 To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites:
-Download zip file: [sndfile-example-src.tar.gz](https://elearning.ua.pt/mod/resource/view.php?id=1143438)
+Download zip file(available from elearning): [sndfile-example-src.tar.gz](https://elearning.ua.pt/mod/resource/view.php?id=1143438)
 
+Note that the `libsndfile` is written in C, but that there is a C++ wrapper (sndfile.hh).
 ### Installation:
 
 To get the software running you should folow the sext steps:
 
-1. Decompress
+1. Decompress `.gz` file
    ```sh
    tar xzvf sndfile-example-src.tar.gz
    ```
 2. Change to directory
    ```sh
     cd sndfile-example-src/
+    mkdir build
     cd build
    ```
 3. Do cmake and make 
@@ -32,7 +34,7 @@ To get the software running you should folow the sext steps:
    ```
 
  
-### In case of error you should follow the next commands:
+### In case of error you should follow the next commands to install library `libsndfile`:
 
  ```sh
  sudo apt-get install -y libsndfile1-dev
@@ -42,7 +44,8 @@ To get the software running you should folow the sext steps:
  make
  ```
 
-## To test:
+### To test:
+Inside: `../sndfile-example-src` you should follow the next commands:
 
 1. Copies "sample.wav" into "copy.wav"
 ```sh
@@ -55,11 +58,7 @@ To get the software running you should folow the sext steps:
 
 ### How to run:
 
-Inside: `../sndfile-example-src`:
-```sh
-cd sndfile-example-src/
-```
-You should follow the next commands:
+Inside: `../sndfile-example-src` you should follow the next commands:
 
 1. Create executable file:
 ```sh
