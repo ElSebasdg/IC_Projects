@@ -5,59 +5,40 @@
 #include <vector>
 #include <map>
 #include <sndfile.hh>
-#include <iomanip> 
+#include <iomanip>
 #include <fstream>
-#include <limits> 
-
-
+#include <limits>
 
 class WAVHist {
 private:
     std::vector<std::map<short, size_t>> counts;
-    std::map<short, size_t> monoCounts;  // Histograma da média dos canais (MID)
-    std::map<short, size_t> sideCounts;  // Histograma da diferença dos canais (SIDE)
-
-    std::map<short, size_t> monoCoarseCounts;  // Barras MID
-    std::map<short, size_t> sideCoarseCounts;  // Barras SIDE
-
-
+    std::map<short, long> monoCounts;  // Histograma da média dos canais (MID)
+    std::map<short, long> sideCounts;  // Histograma da diferença dos canais (SIDE)
 
 public:
-  WAVHist(const SndfileHandle& sfh) {
-		counts.resize(sfh.channels());
-	}
-
-    void update(const std::vector<short>& samples) {
-
-            for (auto s : samples) {
-                for (size_t channel = 0; channel < counts.size(); ++channel) {
-                    counts[channel][s]++;
-                    // std::cout << "Channel:" << std::setw(6) << channel << '\n';
-
-                }
-            }
-
-             for (long unsigned int i = 0; i < samples.size() / 2; i++) {
-                // MID
-                short mid = (samples[2 * i] + samples[2 * i + 1]) / 2;
-                monoCounts[mid]++;
-
-                short coarseMid = mid / 2 * 2;
-                monoCoarseCounts[coarseMid]++;
-
-                // SIDE
-                short side = (samples[2 * i] - samples[2 * i + 1]) / 2;
-                sideCounts[side]++;
-
-                short coarseSide = side / 2 * 2;
-                sideCoarseCounts[coarseSide]++;
-            }
-
+    WAVHist(const SndfileHandle& sfh) {
+        counts.resize(sfh.channels());
     }
 
+    void update(const std::vector<short>& samples) {
+        for (auto s : samples) {
+            for (size_t channel = 0; channel < counts.size(); ++channel) {
+                counts[channel][s]++;
+            }
+        }
 
+        for (long unsigned int i = 0; i < samples.size() / 2; i++) {
+            // MID
+            long mid = (samples[2 * i] + samples[2 * i + 1]) / 2;
+            monoCounts[mid]++;
 
-    void saveHistogramData(const std::string& filename, const std::map<short, size_t>& histogram) const {
+            // SIDE
+            long side = (samples[2 * i] - samples[2 * i + 1]) / 2;
+            sideCounts[side]++;
+        }
+    }
+
+    void saveHistogramData(const std::string& filename, const std::map<short, long>& histogram) const {
         std::ofstream outfile(filename);
         if (outfile.is_open()) {
             for (const auto& [value, counter] : histogram) {
@@ -71,10 +52,10 @@ public:
     }
 
     void saveHistograms() {
-        saveHistogramData("mid_histogram.txt", monoCoarseCounts);
-        saveHistogramData("side_histogram.txt", sideCoarseCounts);
+        saveHistogramData("mid_histogram.txt", monoCounts);
+        saveHistogramData("side_histogram.txt", sideCounts);
     }
-        
+
     void dump(const size_t channel) const {
         for (auto [value, counter] : counts[channel])
             std::cout << value << '\t' << counter << '\n';
@@ -84,7 +65,7 @@ public:
     void dumpMono() {
         std::cout << '\n';
         std::cout << "MID VALUES -----------------------------------" << std::endl;
-    for (const auto& [value, counter] : monoCounts) {
+        for (const auto& [value, counter] : monoCounts) {
             std::cout << "Value:" << std::setw(6) << value << " | Counter:" << std::setw(6) << counter << '\n';
         }
     }
@@ -97,9 +78,6 @@ public:
             std::cout << "Value:" << std::setw(6) << value << " | Counter:" << std::setw(6) << counter << '\n';
         }
     }
-
-
-
 };
 
 #endif

@@ -1,7 +1,7 @@
 n = 100             # Number of intervals
 max_x = 40000.0     # Max X-axis value
 min_x = -40000.0    # Min X-axis value
-max_y = 500.0        # Max Y-axis value
+max_y = 100.0        # Max Y-axis value
 min_y = 0.0         # Min Y-axis value
 width_x = (max_x - min_x) / n  # Interval width for X-axis
 width_y = (max_y - min_y) / n  # Interval width for Y-axis
@@ -12,10 +12,9 @@ column_index = 1                # Column index containing your data
 # Function used to map a value to the intervals
 hist(x, width) = width * floor(x / width) + width / 2.0
 
-set boxwidth width_x * 0.9
-set style fill solid 0.5  # Fill style
+
 set yrange [min_y:max_y]   # Customize Y-axis range
 set xrange [min_x:max_x]   # Customize X-axis range
 
 # Count and plot
-plot data_file using (hist($1, width_x)):(1.0) smooth freq with boxes lc rgb "green" notitle
+plot data_file 
