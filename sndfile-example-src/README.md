@@ -56,7 +56,7 @@ Inside: `../sndfile-example-src` you should follow the next commands:
 ../sndfile-example-bin/wav_hist sample.wav 0
 ```
 
-### How to run:
+### How to run example 1:
 
 Inside: `../sndfile-example-src` you should follow the next commands:
 
@@ -68,6 +68,21 @@ g++ -o wav_hist wav_hist.cpp -lsndfile
 ```s
 ./wav_hist out.wav 1 
 ```
+
+### How to run example 2:
+
+Inside: `../sndfile-example-src` you should follow the next commands:
+
+1. Create executable file:
+```sh
+g++ -o wavcmp wav_cmp.cpp -lsndfile
+```
+2. Execute using`.wav`files:
+```s
+./wavcmp -v sample.wav out.wav
+```
+
+
 ## Documentation
 
 
