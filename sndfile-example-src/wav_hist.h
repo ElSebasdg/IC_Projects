@@ -27,29 +27,32 @@ public:
 		counts.resize(sfh.channels());
 	}
 
-
     void update(const std::vector<short>& samples) {
-            size_t n { };
+
             for (auto s : samples) {
                 for (size_t channel = 0; channel < counts.size(); ++channel) {
                     counts[channel][s]++;
-                }
-                n++;
+                    // std::cout << "Channel:" << std::setw(6) << channel << '\n';
 
-                if (counts.size() == 2) {
-                    short left = samples[n % counts.size()];
-                    short right = samples[(n + 1) % counts.size()];
-                    short mid = (left + right) / 2;
-                    short side = (left - right) / 2;
-                    monoCounts[mid]++;
-                    sideCounts[side]++;
-
-                    short coarseMid = mid / 2 * 2;
-                    short coarseSide = side / 2 * 2;
-                    monoCoarseCounts[coarseMid]++;
-                    sideCoarseCounts[coarseSide]++;
                 }
             }
+
+             for (long unsigned int i = 0; i < samples.size() / 2; i++) {
+                // MID
+                short mid = (samples[2 * i] + samples[2 * i + 1]) / 2;
+                monoCounts[mid]++;
+
+                short coarseMid = mid / 2 * 2;
+                monoCoarseCounts[coarseMid]++;
+
+                // SIDE
+                short side = (samples[2 * i] - samples[2 * i + 1]) / 2;
+                sideCounts[side]++;
+
+                short coarseSide = side / 2 * 2;
+                sideCoarseCounts[coarseSide]++;
+            }
+
     }
 
 
@@ -67,31 +70,9 @@ public:
         }
     }
 
-
-
     void saveHistograms() {
         saveHistogramData("mid_histogram.txt", monoCoarseCounts);
         saveHistogramData("side_histogram.txt", sideCoarseCounts);
-    }
-
-    void update_mid(const std::vector<short>& samples) {
-        for (long unsigned int i = 0; i < samples.size() / 2; i++) {
-            short mid = (samples[2 * i] + samples[2 * i + 1]) / 2;
-            monoCounts[mid]++;
-
-            short coarseMid = mid / 2 * 2;
-            monoCoarseCounts[coarseMid]++;
-        }
-    }
-
-    void update_side(const std::vector<short>& samples) {
-        for (long unsigned int i = 0; i < samples.size() / 2; i++) {
-            short side = (samples[2 * i] - samples[2 * i + 1]) / 2;
-            sideCounts[side]++;
-
-            short coarseSide = side / 2 * 2;
-            sideCoarseCounts[coarseSide]++;
-        }
     }
         
     void dump(const size_t channel) const {
