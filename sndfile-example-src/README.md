@@ -105,6 +105,32 @@ g++ -o wavquant wav_quant.cpp -lsndfile
 ./wavquant sample.wav out.wav 1
 ```
 
+
+### How to run example 4:
+
+Inside: `../sndfile-example-src` you should follow the next commands:
+
+1. Compile the program:
+```sh
+g++ -o wav_effects wav_effects.cpp -lsndfile -lm
+```
+
+2. Execute using`.wav`files and choose an effect (1-6): 
+```s
+./wav_effects sample.wav out.wav 1
+```
+3. Test with different values and listen to out.wav : 
+```s
+../wav_effects  sample.wav out.wav 3
+```
+```s
+./wav_effects  sample.wav out.wav 6
+```
+```s
+./wav_effects  sample.wav out.wav 5
+```
+
+
 ## Documentation
 
 
