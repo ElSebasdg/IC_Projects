@@ -82,6 +82,28 @@ g++ -o wavcmp wav_cmp.cpp -lsndfile
 ./wavcmp -v sample.wav out.wav
 ```
 
+### How to run example 3:
+
+Inside: `../sndfile-example-src` you should follow the next commands:
+
+1. Create executable file:
+```sh
+g++ -o wavquant wav_quant.cpp -lsndfile
+```
+2. Execute using`.wav`files:
+```s
+./wavquant sample.wav out.wav 4
+```
+3. Test with different values and listen to out.wav : 
+```s
+./wavquant sample.wav out.wav 3
+```
+```s
+./wavquant sample.wav out.wav 2
+```
+```s
+./wavquant sample.wav out.wav 1
+```
 
 ## Documentation
 
