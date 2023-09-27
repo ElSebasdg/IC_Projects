@@ -128,6 +128,19 @@ g++ -o wav_effects wav_effects.cpp -lsndfile -lm
 ```
 ```s
 ./wav_effects  sample.wav out.wav 5
+
+```
+
+
+### How to run example 5:
+
+1. Create executable test file:
+```sh
+g++ test_ex5.cpp -o test_ex5
+```
+2. Execute:
+```s
+./test_ex5
 ```
 
 
