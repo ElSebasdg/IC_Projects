@@ -4,22 +4,24 @@
 #include <bitset>
 
 class BitStream {
-
 private:
     std::fstream file;
     uint8_t buffer;         //byte que está a ser lido
     uint8_t bufferLength;   //nº de bits no buffer
+    bool eofFlag;           // Flag to track end of file
 
     // Lê o próximo byte do ficheiro
     void readByte() {
         if (file.is_open() && !file.eof()) {
             file.get(reinterpret_cast<char&>(buffer));
             bufferLength = 8;
+        } else {
+            eofFlag = true; // falg a 1 no EOF
         }
     }
 
 public:
-    BitStream(const std::string& filename, bool writeMode) {
+    BitStream(const std::string& filename, bool writeMode) : eofFlag(false) {
         if (writeMode) {    // writeMode = 1 -> escreve
             file.open(filename, std::ios::out | std::ios::binary);
             buffer = 0;
@@ -28,6 +30,7 @@ public:
             file.open(filename, std::ios::in | std::ios::binary);
             buffer = 0;
             bufferLength = 0;
+            readByte(); // Initialize buffer and eofFlag when opening for reading
         }
     }
 
@@ -49,11 +52,11 @@ public:
 
     // Lê apenas um bit (0 ou 1)
     bool readBit() {
-        if (bufferLength == 0) {
+        if (bufferLength == 0 && !eofFlag) {
             readByte();
         }
 
-        bool bit = (buffer >> (bufferLength-1)) & 1; //do + significativo para o -
+        bool bit = (buffer >> (bufferLength - 1)) & 1; //do + significativo para o -
         bufferLength--;
         return bit;
     }
@@ -90,7 +93,7 @@ public:
         }
     }
 
-    // Lê um String
+    // Lê uma String
     std::string readString(size_t length) {
         std::string result;
         for (size_t i = 0; i < length; i++) {
@@ -112,4 +115,13 @@ public:
         }
     }
 
+    // chekckar se foiu aberto
+    bool is_open() {
+        return file.is_open();
+    }
+
+    // EOF
+    bool eof() {
+        return eofFlag;
+    }
 };

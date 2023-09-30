@@ -56,7 +56,7 @@ Inside: `../sndfile-example-src` you should follow the next commands:
 ../sndfile-example-bin/wav_hist sample.wav 0
 ```
 
-### How to run example 1:
+## How to run example 1:
 
 Inside: `../sndfile-example-src` you should follow the next commands:
 
@@ -69,7 +69,7 @@ g++ -o wav_hist wav_hist.cpp -lsndfile
 ./wav_hist out.wav 1 
 ```
 
-### How to run example 2:
+## How to run example 2:
 
 Inside: `../sndfile-example-src` you should follow the next commands:
 
@@ -82,7 +82,7 @@ g++ -o wavcmp wav_cmp.cpp -lsndfile
 ./wavcmp -v sample.wav out.wav
 ```
 
-### How to run example 3:
+## How to run example 3:
 
 Inside: `../sndfile-example-src` you should follow the next commands:
 
@@ -106,7 +106,7 @@ g++ -o wavquant wav_quant.cpp -lsndfile
 ```
 
 
-### How to run example 4:
+## How to run example 4:
 
 Inside: `../sndfile-example-src` you should follow the next commands:
 
@@ -132,7 +132,7 @@ g++ -o wav_effects wav_effects.cpp -lsndfile -lm
 ```
 
 
-### How to run example 5:
+## How to run example 5:
 
 1. Create executable test file:
 ```sh
@@ -142,6 +142,24 @@ g++ test_ex5.cpp -o test_ex5
 ```s
 ./test_ex5
 ```
+
+
+## How to run example 6:
+
+1. Create executable test file:
+```sh
+g++ decoder_encoder.cpp -o decoder_encoder
+```
+2. To use encoder:
+```s
+./decoder_encoder encoder 01_file.txt encoded.bin
+```
+
+2. To use decoder:
+```s
+./decoder_encoder decoder encoded.bin 01_file.txt
+```
+
 
 
 ## Documentation
