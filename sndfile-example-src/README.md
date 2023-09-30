@@ -3,8 +3,26 @@
 
 Lab class number 1
 
+# Table of Contents
 
-## Getting Started:
+1. [IC - Informação e Codificação](#ic---informação-e-codificação)
+2. [Lab class number 1](#lab-class-number-1)
+3. [Getting Started](#getting-started)
+   - [Prerequisites](#prerequisites)
+   - [Installation](#installation)
+     - [In case of error you should follow the next commands to install library libsndfile:](#in-case-of-error-you-should-follow-the-next-commands-to-install-library-libsndfile)
+   - [To test](#to-test)
+4. [How to run example 1](#how-to-run-example-1)
+5. [How to run example 2](#how-to-run-example-2)
+6. [How to run example 3](#how-to-run-example-3)
+7. [How to run example 4](#how-to-run-example-4)
+8. [How to run example 5](#how-to-run-example-5)
+9. [How to run example 6](#how-to-run-example-6)
+10. [Documentation](#documentation)
+   - [Lab work n◦1](#lab-work-n◦1)
+
+
+## Getting Started: <a name="getting-started"></a>
 
 This is an example of how you may give instructions on setting up your project locally using the material given in classes.
 To get a local copy up and running follow these simple example steps.
