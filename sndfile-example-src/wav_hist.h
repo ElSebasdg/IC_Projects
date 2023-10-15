@@ -12,12 +12,14 @@
 class WAVHist {
 private:
     std::vector<std::map<short, size_t>> counts;
+    std::map<short, long> leftCounts;  // Histograma canal esquerdo (LEFT)
+    std::map<short, long> rightCounts; // Histograma canal direito (RIGHT)
     std::map<short, long> monoCounts;  // Histograma da média dos canais (MID)
     std::map<short, long> sideCounts;  // Histograma da diferença dos canais (SIDE)
 
 public:
-    WAVHist(const SndfileHandle& sfh) {
-        counts.resize(sfh.channels());
+     WAVHist(const SndfileHandle& sfh) {
+         counts.resize(sfh.channels());
     }
 
     void update(const std::vector<short>& samples) {
@@ -28,6 +30,12 @@ public:
         }
 
         for (long unsigned int i = 0; i < samples.size() / 2; i++) {
+            // LEFT 
+            leftCounts[samples[2 * i]]++;
+
+            // RIGHT
+            rightCounts[samples[2 * i + 1]]++;
+
             // MID
             long mid = (samples[2 * i] + samples[2 * i + 1]) / 2;
             monoCounts[mid]++;
@@ -52,14 +60,16 @@ public:
     }
 
     void saveHistograms() {
+        saveHistogramData("left_histogram.txt", leftCounts);
+        saveHistogramData("right_histogram.txt", rightCounts);
         saveHistogramData("mid_histogram.txt", monoCounts);
         saveHistogramData("side_histogram.txt", sideCounts);
     }
 
-    void dump(const size_t channel) const {
-        for (auto [value, counter] : counts[channel])
-            std::cout << value << '\t' << counter << '\n';
-    }
+    // void dump(const size_t channel) const {
+    //     for (auto [value, counter] : counts[channel])
+    //         std::cout << value << '\t' << counter << '\n';
+    // }
 
     // Histograma da média dos canais (MID)
     void dumpMono() {
