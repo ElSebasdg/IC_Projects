@@ -1,22 +1,27 @@
 #include <vector>
+#include <string> // Add this line
+#include <fstream>
 #include <cmath>
 
 class WavQuant {
 public:
     WavQuant(int numBits);
 
-    // Só para 1 sample
+    // Quantize a single sample
     short quantizeSample(short sample);
 
-    // Vetor de samples
+    // Quantize a vector of samples
     std::vector<short> quantizeSamples(const std::vector<short>& samples);
 
-    // nivel
+    // Get the quantization level
     short getQuantizationLevels() const;
 
+    // Save quantized samples to a text file
+    void saveQuantizedSamplesToTextFile(const std::vector<short>& quantizedSamples, const std::string& filename);
+
 private:
-    int numBits; 
-    short quantizationLevels; 
+    int numBits;
+    short quantizationLevels;
 };
 
 WavQuant::WavQuant(int numBits) {
@@ -42,3 +47,16 @@ std::vector<short> WavQuant::quantizeSamples(const std::vector<short>& samples) 
 short WavQuant::getQuantizationLevels() const {
     return quantizationLevels;
 }
+
+void WavQuant::saveQuantizedSamplesToTextFile(const std::vector<short>& quantizedSamples, const std::string& filename) {
+    std::ofstream outFile(filename);
+    if (outFile.is_open()) {
+        for (short sample : quantizedSamples) {
+            outFile << sample << std::endl;
+        }
+        outFile.close();
+    } else {
+        std::cerr << "Error: Unable to open the output text file for writing." << std::endl;
+    }
+}
+

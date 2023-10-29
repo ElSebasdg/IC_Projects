@@ -1,7 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <sndfile.hh>
-#include "wav_quant.h" 
+#include "wav_quant.h"
+#include <fstream>
 
 using namespace std;
 
@@ -42,19 +43,18 @@ int main(int argc, char* argv[]) {
     SndfileHandle sfhOut(outputFile, SFM_WRITE, sfh.format(), sfh.channels(), sfh.samplerate());
 
     while (size_t nFrames = sfh.readf(samples.data(), FRAMES_BUFFER_SIZE)) {
+        // Quantize the samples
         quantizedSamples = quantizer.quantizeSamples(samples);
 
-        // Redimensionar as amostras quantizadas de volta para a gama original
-        for (short& quantizedSample : quantizedSamples) {
-            quantizedSample = static_cast<short>(quantizedSample * 32767.0 / quantizer.getQuantizationLevels());
-        }
+        // Save the quantized samples to a text file
+        const std::string textOutputFile = "quantized_samples.txt";
+        quantizer.saveQuantizedSamplesToTextFile(quantizedSamples, textOutputFile);
 
-        // Gravar as amostras quantizadas redimensionadas no out.wav
+        // Write the quantized samples to the WAV file
         sfhOut.writef(quantizedSamples.data(), nFrames);
     }
 
     cout << "Quantization completed with " << numBits << " bits per sample.\n";
-
 
     return 0;
 }

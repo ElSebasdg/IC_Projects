@@ -18,3 +18,36 @@ set xrange [min_x:max_x]   # Customize X-axis range
 
 # Count and plot
 plot data_file 
+
+Exercice 3, remenber to change variable nBits:
+# Set the terminal type to something that can display a histogram (e.g., x11, qt, wxt).
+set terminal x11 # You can change this to a different terminal type.
+
+# Specify the title and labels for the plot.
+set title "Histogram of Quantized Audio Data"
+set xlabel "Quantization Levels"
+set ylabel "Frequency"
+
+# Load the data from the "quantized_samples.txt" file and create a histogram.
+binwidth = 1
+bin(x, width) = width*floor(x/width)
+set boxwidth binwidth
+
+# Set the number of bits used for quantization (4 bits).
+numBits = 8
+
+# Set the x-axis range to cover the range of quantization levels.
+set xrange [-2**(numBits-1)-0.5:2**(numBits-1)-0.5]
+
+# Set the y-axis range to cover both negative and positive frequencies.
+set yrange [0:]
+
+# Set the x-tick values to match the quantization levels.
+set xtics 1
+set xtics scale 0
+
+# Count the frequencies of each quantization level and create a histogram.
+hist(x, binwidth) = binwidth*floor(x/binwidth)
+plot "quantized_samples.txt" using (hist($1, binwidth)):(1.0) smooth frequency with boxes
+
+
