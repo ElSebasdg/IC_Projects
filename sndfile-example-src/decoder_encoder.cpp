@@ -3,7 +3,7 @@
 #include "BitStream.h" // Include your BitStream class header here
 
 
-// encoderr should be able to convert a text file containing only 0s and 1s into the binary equivalent
+// encoder should be able to convert a text file containing only 0s and 1s into the binary equivalent
 void encoder(const std::string& inputFileName, const std::string& outputFileName) {
     std::ifstream inputFile(inputFileName, std::ios::in);
     if (!inputFile.is_open()) {
@@ -33,13 +33,13 @@ void decoder(const std::string& inputFileName, const std::string& outputFileName
 
     BitStream inputBitStream(inputFileName, false);
     if (!inputBitStream.is_open()) {
-        std::cerr << "Error opening input file." << std::endl;
+        std::cerr << "Error opening the input file." << std::endl;
         return;
     }
 
     std::ofstream outputFile(outputFileName, std::ios::out);
     if (!outputFile.is_open()) {
-        std::cerr << "Error creating output file." << std::endl;
+        std::cerr << "Error creating the output file." << std::endl;
         return;
     }
 
@@ -53,7 +53,6 @@ void decoder(const std::string& inputFileName, const std::string& outputFileName
         } else {
             outputFile << '0';
         }
-
     }
 
     inputBitStream.close();

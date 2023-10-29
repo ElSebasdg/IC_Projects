@@ -176,6 +176,33 @@ g++ decoder_encoder.cpp -o decoder_encoder
 ./decoder_encoder decoder encoded.bin 01_file.txt
 ```
 
+## How to run example 7: <a name="how-to-run-example-7"></a>
+
+Depending if you want to use the Dct_encoder or the Dct_decoder you need to choose.
+For that we created two different files for the Decoder and the Encoder.
+
+To test the compressed audio correctly, first, you have to run the encoder on the desired audio to create the binary file for later the decoder to reconstruct (an approximate version of) the original audio compressed.
+
+`Encoder`
+1. Create executable test file:
+```sh
+g++ -o dct_encoder dct_encoder.cpp -lfftw3 -lsndfile
+```
+2. To use encoder to generate binary file of the audio:
+```s
+./dct_encoder -v -bs 1024 -frac 0.2 sample.wav encoded_output.dat
+```
+
+`Decoder`
+1. Create executable test file:
+```sh
+g++ -o dct_decoder dct_decoder.cpp -lfftw3 -lsndfile
+```
+2. To use the decoder to reconstruct the binary file of the audio, where the argv[1]("2" in this example) is the number of samples:
+```s
+./dct_decoder 2 encoded_output.dat output_audio.wav
+```
+
 
 
 ## Documentation <a name="documentation"></a>

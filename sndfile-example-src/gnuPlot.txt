@@ -20,21 +20,18 @@ set xrange [min_x:max_x]   # Customize X-axis range
 plot data_file 
 
 Exercice 3, remenber to change variable nBits:
-# Set the terminal type to something that can display a histogram (e.g., x11, qt, wxt).
-set terminal x11 # You can change this to a different terminal type.
 
-# Specify the title and labels for the plot.
+
 set title "Histogram of Quantized Audio Data"
 set xlabel "Quantization Levels"
 set ylabel "Frequency"
 
-# Load the data from the "quantized_samples.txt" file and create a histogram.
 binwidth = 1
 bin(x, width) = width*floor(x/width)
 set boxwidth binwidth
 
 # Set the number of bits used for quantization (4 bits).
-numBits = 8
+numBits = 2
 
 # Set the x-axis range to cover the range of quantization levels.
 set xrange [-2**(numBits-1)-0.5:2**(numBits-1)-0.5]
