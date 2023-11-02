@@ -16,7 +16,8 @@ Lab class number 1
 5. [How to run example 4](#how-to-run-example-4)
 6. [How to run example 5](#how-to-run-example-5)
 7. [How to run example 6](#how-to-run-example-6)
-8. [Documentation](#documentation)
+8. [How to run example 6](#how-to-run-example-7)
+9. [Documentation](#documentation)
 
 ## Getting Started: <a name="getting-started"></a>
 
