@@ -12,9 +12,9 @@ In this work, besides dealing with audio files, you will also need to manipulate
    - [Prerequisites](#prerequisites)
    - [Installation](#opencv_installation)
 
-2.[How to run example 1](#getting-started)
+2.[How to run example 1](#example_1)
 
-9. [Documentation](#documentation)
+9.[Documentation](#documentation)
 
 ## Getting Started: <a name="getting-started"></a>
 
@@ -52,15 +52,18 @@ To get the Opencv software running you should folow the sext steps:
    ```sh
    make -j4
    ```
-   `⚠️ Note: that it will take some time`
+   `⚠️ Note: that it will take some time depending upon your CPU power`
 
 6. Finally, install the OpenCV package
    ```sh
    sudo make install
    ```
 
+ℹ️`Instalation source: https://www.geeksforgeeks.org/how-to-install-opencv-in-c-on-linux/`ℹ️
 
-ℹ️`Source: https://www.geeksforgeeks.org/how-to-install-opencv-in-c-on-linux/`ℹ️
+
+## How to run example 1: <a name="example_1"></a>
+
 ## Documentation <a name="documentation"></a>
 
 [Lab work n◦2](https://elearning.ua.pt/pluginfile.php/4438659/mod_resource/content/2/trab2.pdf)
