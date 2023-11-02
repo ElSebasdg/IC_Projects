@@ -82,6 +82,21 @@ To get the Opencv software running you should folow the sext steps:
 
 ## How to run example 1: <a name="example_1"></a>
 
+
+1. To compile the `color_channel.cpp` you just need to do `make` inside the build directory:
+   ```sh
+   make
+   ```
+2.  Finally to execute the following command `./color_channel` followed by image path and the channel number.
+   ```sh
+   ./color_channel ../horacio 1
+   ```
+
+
+`ℹ️ Note: Use 0 for Blue channel, 1 for Green channel and 2 for Red.`
+
+`⚠️ Attention: Be careful with the image path.`
+
 ## Documentation <a name="documentation"></a>
 
 [Lab work n◦2](https://elearning.ua.pt/pluginfile.php/4438659/mod_resource/content/2/trab2.pdf)
