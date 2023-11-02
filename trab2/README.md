@@ -10,11 +10,12 @@ In this work, besides dealing with audio files, you will also need to manipulate
 
 1. [Getting Started](#getting-started)
    - [Prerequisites](#prerequisites)
-   - [Installation](#opencv_installation)
+   - [Opencv installation](#opencv_installation)
+   - [Project installation](#project_installation)
 
-2.[How to run example 1](#example_1)
+2. [How to run example 1](#example_1)
 
-9.[Documentation](#documentation)
+9. [Documentation](#documentation)
 
 ## Getting Started: <a name="getting-started"></a>
 
@@ -60,6 +61,23 @@ To get the Opencv software running you should folow the sext steps:
    ```
 
 ℹ️`Instalation source: https://www.geeksforgeeks.org/how-to-install-opencv-in-c-on-linux/`ℹ️
+
+
+### Setup Project:<a name="project_installation"></a>
+
+
+1. Create build directory and go to it: 
+   ```sh
+   mkdir -p build && cd build
+   ```
+2. Execute "cmake .." to configure project using the CMakeLists.txt file
+   ```sh
+   cmake ..
+   ```
+3. Finally do "make" to compile the project
+   ```sh
+   make
+   ```
 
 
 ## How to run example 1: <a name="example_1"></a>
