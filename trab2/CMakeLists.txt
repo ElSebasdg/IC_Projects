@@ -6,3 +6,6 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 add_executable( color_channel color_channel.cpp)
 target_link_libraries( color_channel ${OpenCV_LIBS} )
+
+add_executable(ex2 ex2.cpp)
+target_link_libraries( ex2 ${OpenCV_LIBS} )

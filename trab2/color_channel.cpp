@@ -29,7 +29,7 @@ int main(int argc, char** argv)
     }
 
     vector<Mat> channels;
-    split(image, channels);
+    split(image, channels); 
 
     Mat extractedChannel = channels[channelNumber];
 

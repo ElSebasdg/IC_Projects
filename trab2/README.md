@@ -15,6 +15,8 @@ In this work, besides dealing with audio files, you will also need to manipulate
 
 2. [How to run example 1](#example_1)
 
+3. [How to run example 2](#example_2)
+
 9. [Documentation](#documentation)
 
 ## Getting Started: <a name="getting-started"></a>
@@ -96,6 +98,31 @@ To get the Opencv software running you should folow the sext steps:
 `ℹ️ Note: Use 0 for Blue channel, 1 for Green channel and 2 for Red.`
 
 `⚠️ Attention: Be careful with the image path.`
+
+`📁 The color channel image is stored inside the build directory`
+
+
+
+## How to run example 2: <a name="example_2"></a>
+
+
+1. To compile the `ex2.cpp` you just need to do `make` inside the build directory:
+   ```sh
+   make
+   ```
+2.  Finally to execute the following command `./ex2` followed by image path, the rotation_angle and light intensity value.
+   ```sh
+   ./ex2 ../horacio.png 90 50
+   ```
+
+
+`ℹ️ Note: The rotation angle must be multiple of 90 degrees and the light intensity value must be between 0 and 255`
+
+`⚠️ Attention: Be careful with the image path.`
+
+
+`📁 The images are stored inside the build directory`
+
 
 ## Documentation <a name="documentation"></a>
 
