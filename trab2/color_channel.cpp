@@ -4,6 +4,7 @@
 
 using namespace cv;
 using namespace std;
+
 string getOutputFileName(const string& inputImagePath, const string& channelName);
 
 int main(int argc, char** argv)
@@ -28,13 +29,17 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    vector<Mat> channels;
-    split(image, channels); 
+    // Create a single-channel image
+    Mat extractedChannel(image.rows, image.cols, CV_8UC1);
 
-    Mat extractedChannel = channels[channelNumber];
+    // Iterate over pixels and copy the selected channel
+    for (int i = 0; i < image.rows; ++i) {
+        for (int j = 0; j < image.cols; ++j) {
+            extractedChannel.at<uchar>(i, j) = image.at<Vec3b>(i, j)[channelNumber];
+        }
+    }
 
     string channelName;
-
     switch (channelNumber) {
         case 0:
             channelName = "Blue";
