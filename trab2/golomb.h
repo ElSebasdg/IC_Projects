@@ -51,31 +51,35 @@ public:
 
         return bits;
     }
+    
+int decode(const std::vector<bool>& bits, unsigned int& index) {
+    unsigned int q = 0;
+    unsigned int i = index;
 
-    int decode(const std::vector<bool>& bits) {
-        unsigned int q = 0;
-        unsigned int i = 0;
-
-        // Count the number of consecutive true values, which represents the quotient q
-        while (bits[i]) {
-            q++;
-            i++;
-        }
-
-        // Extract the next b bits to represent the remainder r
-        unsigned int r = 0;
-        for (unsigned int j = 0; j < b; j++) {
-            r = (r << 1) | bits[i + j];
-        }
-
-        // Calculate the original number
-        int number = q * m + r;
-
-        // Adjust the sign based on the last bit in the input vector
-        if (bits[i + b]) {
-            number = -number;
-        }
-
-        return number;
+    // Count the number of consecutive true values, which represents the quotient q
+    while (bits[i]) {
+        q++;
+        i++;
     }
+
+    // Extract the next b bits to represent the remainder r
+    unsigned int r = 0;
+    for (unsigned int j = 0; j < b; j++) {
+        r = (r << 1) | bits[i + j];
+    }
+
+    // Update the index parameter to the new position
+    index = i + b;
+
+    // Calculate the original number
+    int number = q * m + r;
+
+    // Adjust the sign based on the last bit in the input vector
+    if (bits[index - 1]) {
+        number = -number;
+    }
+
+    return number;
+}
+
 };
