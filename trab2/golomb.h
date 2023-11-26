@@ -82,4 +82,8 @@ int decode(const std::vector<bool>& bits, unsigned int& index) {
     return number;
 }
 
+unsigned int getB() const { // New function to get the value of 'b'
+        return b;
+    }
+
 };
