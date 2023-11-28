@@ -48,7 +48,7 @@ public:
         }
     }
 
-    // Ler e descodificar dados de áudio do fluxo de bits
+   // Ler e descodificar dados de áudio do fluxo de bits
     void decodeAudio(std::vector<int>& decodedAudio, BitStream& bitStream, int mappingOn, bool lossy, double bitrate) {
         // Ajustar parâmetro 'm' do Golomb com base no bitrate para decodificação com perda
         if (lossy) {
@@ -56,28 +56,46 @@ public:
         }
 
         while (!bitStream.eof()) {
-            // Ler código Golomb do fluxo de bits com comprimento dinâmico
-            std::string golombCode = bitStream.readStringDynamicLength();
+            // Read Golomb code length
+            size_t codeLength = 0;
+            char bit = bitStream.readBit();
 
-            // Verificar se o código Golomb está vazio (indicando EOF inesperado)
-            if (golombCode.empty()) {
-                std::cerr << "Unexpected EOF while reading Golomb code." << std::endl;
-                break;
+            // Continue reading bits until a '0' is encountered
+            while (bit == '1') {
+                codeLength++;
+                bit = bitStream.readBit();
             }
 
-            // Debug: Print código Golomb antes da descodificação
-            std::cout << "Golomb Code: " << golombCode << " | Code Length: " << golombCode.length() << std::endl;
+            // Read the terminating '0'
+            if (bit == '0') {
+                // Read Golomb code with the determined length (including unary and binary parts)
+                std::string golombCode = bitStream.readString(codeLength + golomb.getEncodeParameter());
 
-            // Descodificar o código Golomb para obter o residual de previsão            
-            long residual = 0;
-            char* pBits = &golombCode[0];
-            pBits = golomb.decodeString(pBits, &residual, mappingOn);
+                // Debug: Print Golomb code before decoding
+                std::cout << "Golomb Code: " << golombCode << " | Code Length: " << codeLength << std::endl;
 
-            // Atualizar o preditor e adicionar a amostra decodificada aos dados de áudio
-            predictedValue += residual;
-            decodedAudio.push_back(predictedValue);
+                // Decode the Golomb code to obtain the prediction residual
+                long residual = 0;
+                char* pBits = &golombCode[0];
+                pBits = golomb.decodeString(pBits, &residual, mappingOn);
+
+                // Update the predictor and add the decoded sample to the audio data
+                predictedValue += residual;
+                decodedAudio.push_back(predictedValue);
+
+                // Debug: Print decoded residual
+                std::cout << "Decoded Residual: " << residual << std::endl;
+            } else {
+                // Handle the case where the terminating '0' is not found
+                std::cerr << "Error: Invalid Golomb code format." << std::endl;
+                break;
+            }
         }
     }
+
+
+
+
 
 };
 

@@ -106,33 +106,6 @@ public:
         return result;
     }
 
-    std::string readStringDynamicLength() {
-        std::string result;
-
-        uint32_t golombLength = 0;
-        while (!eof() && readBit()) {
-            golombLength++;
-        }
-        if (eof()) {
-            std::cerr << "Unexpected EOF while reading dynamic-length string." << std::endl;
-            return "";
-        }
-
-        for (uint32_t i = 0; i < golombLength; ++i) {
-            if (!eof()) {
-                result += (readBit() ? '1' : '0');
-            } else {
-                std::cerr << "Unexpected EOF while reading dynamic-length string." << std::endl;
-                break;
-            }
-        }
-
-        return result;
-    }
-
-
-
-
     // Fecha o ficheiro
     void close() {
         if (file.is_open()) {

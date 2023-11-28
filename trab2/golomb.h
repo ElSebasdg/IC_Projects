@@ -102,12 +102,15 @@ public:
     // Codifica um número decimal para uma string no formato Golomb
     // O parâmetro mappingOn indica se deve ser aplicado mapeamento para números negativos
     string encodeNumber(int n, int mappingOn) {
-        uint32_t mapped = (mappingOn && n < 0) ? -2 * n : (2 * n) + 1;
-        string unary = encodeUnary(mapped);
-        string binary = encodeDecimal(mapped);
+            uint32_t mapped = (mappingOn && n < 0) ? -2 * n : (2 * n) + 1;
+            string unary = encodeUnary(mapped);
+            string binary = encodeDecimal(mapped);
 
-        return unary + binary;
-    }
+            return unary + binary;
+        }
+
+
+
 
     // Retorna o valor de m para codificação
     uint32_t getEncodeParameter() {
