@@ -1,38 +1,38 @@
-// audio_codec.cpp
 #include "audio_codec.h"
 
-std::vector<bool> AudioEncoder::encode(const std::vector<std::pair<int, int>>& audio) {
-    std::vector<bool> encodedBits;
+int main() {
+    // Create an instance of AudioCodec with a specific value of m (e.g., 10)
+    AudioCodec audioCodec(10);
 
-    for (size_t i = 0; i < audio.size(); i++) {
-        // Apply quantization based on the target bitrate
-        int quantizedSample1 = static_cast<int>(audio[i].first / targetBitrate);
-        int quantizedSample2 = static_cast<int>(audio[i].second / targetBitrate);
+    // Sample audio data
+    std::vector<int> originalAudio = {50, 52, 48, 45, 47};
 
-        auto bits1 = golomb.encode(quantizedSample1);
-        auto bits2 = golomb.encode(quantizedSample2);
+    // Encode audio data
+    BitStream bitStream("encoded_audio.bin", true); // Open for writing
+    bool lossyEncoding = true;  // Set to true for lossy encoding
+    double bitrate = 128.0;     // Provide the bitrate value
+    audioCodec.encodeAudio(originalAudio, bitStream, 1, lossyEncoding, bitrate); // Enable mapping for negative numbers
+    bitStream.close();
 
-        encodedBits.insert(encodedBits.end(), bits1.begin(), bits1.end());
-        encodedBits.insert(encodedBits.end(), bits2.begin(), bits2.end());
+    // Decode audio data
+    std::vector<int> decodedAudio;
+    BitStream readStream("encoded_audio.bin", false); // Open for reading
+    bool lossyDecoding = true;  // Set to true for lossy decoding
+    audioCodec.decodeAudio(decodedAudio, readStream, 1, lossyDecoding, bitrate); // Enable mapping for negative numbers
+    readStream.close();
+
+    // Display original and decoded audio data
+    std::cout << "Original Audio: ";
+    for (int sample : originalAudio) {
+        std::cout << sample << " ";
     }
+    std::cout << std::endl;
 
-    return encodedBits;
-}
-
-
-std::vector<std::pair<int, int>> AudioDecoder::decode(const std::vector<bool>& bits, unsigned int& index) {
-    std::vector<std::pair<int, int>> decodedAudio;
-
-    while (index < bits.size()) {
-        int decodedSample1 = golomb.decode(bits, index);
-        int decodedSample2 = golomb.decode(bits, index);
-
-        // Perform inverse quantization using the targetBitrate from the associated encoder
-        int originalSample1 = decodedSample1 * encoder->getTargetBitrate();
-        int originalSample2 = decodedSample2 * encoder->getTargetBitrate();
-
-        decodedAudio.emplace_back(originalSample1, originalSample2);
+    std::cout << "Decoded Audio: ";
+    for (int sample : decodedAudio) {
+        std::cout << sample << " ";
     }
+    std::cout << std::endl;
 
-    return decodedAudio;
+    return 0;
 }

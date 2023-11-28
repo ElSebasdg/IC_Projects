@@ -10,7 +10,7 @@ using namespace std;
 class Golomb {
 private:
     uint32_t mEncode, mDecode;
-    
+
     // Retorna a representação unária de um número natural
     string encodeUnary(uint32_t n) {
         uint32_t q = n / mEncode;
@@ -54,6 +54,7 @@ public:
         uint32_t count = 0;
         uint32_t index = 0;
 
+        // Read the unary part
         while (pBits[index] != '0' && pBits[index] != '\0') {
             count++;
             index++;
@@ -61,36 +62,43 @@ public:
 
         uint32_t b = floor(log2(mDecode));
         string key = "";
+
+        // Read the binary part
         for (uint32_t i = 0; i < b; i++) {
             index++;
             key += pBits[index];
         }
 
-        uint32_t decimal = static_cast<uint32_t>(bitset<32>(key).to_ulong());
+        if (!key.empty()) {
+            uint32_t decimal = static_cast<uint32_t>(bitset<32>(key).to_ulong());
 
-        if (!(decimal < (pow(2, (b + 1)) - mDecode))) {
-            index++;
-            key += pBits[index];
-            decimal = static_cast<uint32_t>(bitset<32>(key).to_ulong());
-            decimal = decimal - pow(2, (b + 1)) + mDecode;
-        }
-
-        uint32_t result = count * mDecode + decimal;
-        *resultN = static_cast<long>(result);
-
-        // Aplica o mapeamento para números negativos, se necessário
-        if (mappingOn) {
-            if (result % 2 == 0) {
-                *resultN = static_cast<long>(*resultN / -2);
-            } else {
-                *resultN = static_cast<long>((*resultN - 1) / 2);
+            if (!(decimal < (pow(2, (b + 1)) - mDecode))) {
+                index++;
+                key += pBits[index];
+                decimal = static_cast<uint32_t>(bitset<32>(key).to_ulong());
+                decimal = decimal - pow(2, (b + 1)) + mDecode;
             }
+
+            uint32_t result = count * mDecode + decimal;
+            *resultN = static_cast<long>(result);
+
+            // Apply the mapping for negative numbers, if necessary
+            if (mappingOn) {
+                if (result % 2 == 0) {
+                    *resultN = static_cast<long>(*resultN / -2);
+                } else {
+                    *resultN = static_cast<long>((*resultN - 1) / 2);
+                }
+            }
+        } else {
+            // Handle the case where the key is empty
+            *resultN = 0;
         }
 
         pBits += (index + 1);
         return pBits;
     }
-    
+
     // Codifica um número decimal para uma string no formato Golomb
     // O parâmetro mappingOn indica se deve ser aplicado mapeamento para números negativos
     string encodeNumber(int n, int mappingOn) {
@@ -120,6 +128,7 @@ public:
     void setDecodeParameter(uint32_t m) {
         this->mDecode = m;
     }
+
 };
 
 #endif

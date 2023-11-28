@@ -18,3 +18,6 @@ target_link_libraries( ex2 ${OpenCV_LIBS} )
 
 add_executable(golombTest golombTest.cpp golomb.h)
 target_link_libraries(golombTest ${OpenCV_LIBS})
+
+add_executable(audioCodec audio_codec.cpp audio_codec.h)
+target_link_libraries(audioCodec ${OpenCV_LIBS})

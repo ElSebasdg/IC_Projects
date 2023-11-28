@@ -66,6 +66,7 @@ CMAKE_BINARY_DIR = /home/catarina/Documents/GitHub/IC/trab2/build
 all: CMakeFiles/color_channel.dir/all
 all: CMakeFiles/ex2.dir/all
 all: CMakeFiles/golombTest.dir/all
+all: CMakeFiles/audioCodec.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -76,6 +77,7 @@ preinstall:
 clean: CMakeFiles/color_channel.dir/clean
 clean: CMakeFiles/ex2.dir/clean
 clean: CMakeFiles/golombTest.dir/clean
+clean: CMakeFiles/audioCodec.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -85,7 +87,7 @@ clean: CMakeFiles/golombTest.dir/clean
 CMakeFiles/color_channel.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/color_channel.dir/build.make CMakeFiles/color_channel.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/color_channel.dir/build.make CMakeFiles/color_channel.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/catarina/Documents/GitHub/IC/trab2/build/CMakeFiles --progress-num=1,2 "Built target color_channel"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/catarina/Documents/GitHub/IC/trab2/build/CMakeFiles --progress-num=3,4 "Built target color_channel"
 .PHONY : CMakeFiles/color_channel.dir/all
 
 # Build rule for subdir invocation for target.
@@ -111,7 +113,7 @@ CMakeFiles/color_channel.dir/clean:
 CMakeFiles/ex2.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ex2.dir/build.make CMakeFiles/ex2.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ex2.dir/build.make CMakeFiles/ex2.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/catarina/Documents/GitHub/IC/trab2/build/CMakeFiles --progress-num=3,4 "Built target ex2"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/catarina/Documents/GitHub/IC/trab2/build/CMakeFiles --progress-num=5,6 "Built target ex2"
 .PHONY : CMakeFiles/ex2.dir/all
 
 # Build rule for subdir invocation for target.
@@ -137,7 +139,7 @@ CMakeFiles/ex2.dir/clean:
 CMakeFiles/golombTest.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/golombTest.dir/build.make CMakeFiles/golombTest.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/golombTest.dir/build.make CMakeFiles/golombTest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/catarina/Documents/GitHub/IC/trab2/build/CMakeFiles --progress-num=5,6 "Built target golombTest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/catarina/Documents/GitHub/IC/trab2/build/CMakeFiles --progress-num=7,8 "Built target golombTest"
 .PHONY : CMakeFiles/golombTest.dir/all
 
 # Build rule for subdir invocation for target.
@@ -155,6 +157,32 @@ golombTest: CMakeFiles/golombTest.dir/rule
 CMakeFiles/golombTest.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/golombTest.dir/build.make CMakeFiles/golombTest.dir/clean
 .PHONY : CMakeFiles/golombTest.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/audioCodec.dir
+
+# All Build rule for target.
+CMakeFiles/audioCodec.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/audioCodec.dir/build.make CMakeFiles/audioCodec.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/audioCodec.dir/build.make CMakeFiles/audioCodec.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/catarina/Documents/GitHub/IC/trab2/build/CMakeFiles --progress-num=1,2 "Built target audioCodec"
+.PHONY : CMakeFiles/audioCodec.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/audioCodec.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/catarina/Documents/GitHub/IC/trab2/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/audioCodec.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/catarina/Documents/GitHub/IC/trab2/build/CMakeFiles 0
+.PHONY : CMakeFiles/audioCodec.dir/rule
+
+# Convenience name for target.
+audioCodec: CMakeFiles/audioCodec.dir/rule
+.PHONY : audioCodec
+
+# clean rule for target.
+CMakeFiles/audioCodec.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/audioCodec.dir/build.make CMakeFiles/audioCodec.dir/clean
+.PHONY : CMakeFiles/audioCodec.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

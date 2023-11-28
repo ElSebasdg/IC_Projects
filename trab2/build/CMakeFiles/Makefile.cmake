@@ -52,4 +52,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/color_channel.dir/DependInfo.cmake"
   "CMakeFiles/ex2.dir/DependInfo.cmake"
   "CMakeFiles/golombTest.dir/DependInfo.cmake"
+  "CMakeFiles/audioCodec.dir/DependInfo.cmake"
   )
