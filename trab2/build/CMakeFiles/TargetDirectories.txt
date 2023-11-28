@@ -1,0 +1,5 @@
+/home/catarina/Documents/GitHub/IC/trab2/build/CMakeFiles/color_channel.dir
+/home/catarina/Documents/GitHub/IC/trab2/build/CMakeFiles/ex2.dir
+/home/catarina/Documents/GitHub/IC/trab2/build/CMakeFiles/golombTest.dir
+/home/catarina/Documents/GitHub/IC/trab2/build/CMakeFiles/edit_cache.dir
+/home/catarina/Documents/GitHub/IC/trab2/build/CMakeFiles/rebuild_cache.dir
