@@ -125,7 +125,26 @@ To get the Opencv software running you should folow the sext steps:
 
 `📁 The images are stored inside the build directory`
 
+## How to run example 4: <a name="example_4"></a>
 
+1. To compile the `audio_encoder.cpp` and `audio_decoder.cpp` you just need to do `make` inside the build directory:
+   ```sh
+   make
+   ```
+2.  Execute the following command `./audio_encoder` followed by image path and binary output file to encode the image.
+   ```sh
+   ./audio_encoder ../sample.wav encoded-sample.bin
+   ```
+3.  Execute the following command `./audio_decoder` followed by binary file and the output image to decode the image.
+   ```sh
+   ./audio_decoder encoded-sample.bin decoded-sample.wav
+   ```
+   
+`⚠️ Attention: Be careful with the audio path.`
+
+
+`📁 The output binary and audio files are stored inside the build directory`
+  
 
 ## How to run example 6: <a name="example_6"></a>
 

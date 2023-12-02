@@ -66,9 +66,8 @@ for (int i = 0; i < msize; i++) {
     }
     
     Golomb g;
-    vector<int> decoded;
-    
-    decoded = g.decode(encodedString, m_vector, imgwidth);
+       
+    vector<int> decoded = g.decode(encodedString, m_vector, imgwidth);
 
     //undo the predictions
     int pixel_idx = 0;
