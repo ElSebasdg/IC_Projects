@@ -1,138 +1,250 @@
-#ifndef GOLOMB_H
-#define GOLOMB_H
-
+#include <fstream>
+#include <vector>
+#include <string>
 #include <iostream>
-#include <cmath>
 #include <bitset>
-#include <cstdint>
-
-using namespace std;
+#include <cmath>
 
 class Golomb {
-private:
-    uint32_t mEncode, mDecode;
+    private:
+        int minBitsCount;
+        int maxBitsCount;
+        int valuesWithMinBitsCount;
 
-    // Retorna a representação unária de um número natural
-    string encodeUnary(uint32_t n) {
-        uint32_t q = n / mEncode;
-        string unary = "";
-
-        for (uint32_t i = 0; i < q; i++) {
-            unary += "1";
-        }
-        unary += "0";
-        return unary;
-    }
-
-    // Retorna a representação binária da parte decimal de um número natural
-    string encodeDecimal(uint32_t n) {
-        uint32_t r = n % mEncode;
-        uint32_t b = floor(log2(mEncode));
-        string binary;
-
-        if (r < (pow(2, b + 1) - mEncode)) {
-            bitset<32> binR(r);
-            binary = binR.to_string().substr(32 - b);
+    // Determine the minimum bit count (minBitsCount) and the count of values with the minimum bit count (valuesWithMinBitsCount)
+    void analyzeBits(int m) {
+        if (m != 0){
+            // Calculate the maximum bit count (maxBitsCount): log2(m) rounded up to the nearest integer
+            maxBitsCount = ceil(log2(m));
+            // Calculate the minimum bit count (minBitsCount): maxBitsCount - 1
+            minBitsCount = maxBitsCount - 1;
+            // Calculate the count of values with the minimum bit count (valuesWithMinBitsCount): (2^maxBitsCount) - m
+            valuesWithMinBitsCount = pow(2, maxBitsCount) - m;
         } else {
-            r = r + pow(2, b + 1) - mEncode;
-            bitset<32> binR(r);
-            binary = binR.to_string().substr(32 - (b + 1));
+            // If m is 0, then all counts are set to 0
+            maxBitsCount = 0;
+            minBitsCount = 0;
+            valuesWithMinBitsCount = 0;
         }
-
-        return binary;
     }
 
-public:
-    // Construtor que recebe o valor de m para codificação e descodificação
-    Golomb(uint32_t m) : mEncode(m), mDecode(m) {}
 
-    // Construtor padrão com valores de m predefinidos
-    Golomb() : mEncode(1000), mDecode(1000) {}
-
-    // Descodifica uma string binária para um número decimal
-    // O parâmetro mappingOn indica se deve ser aplicado mapeamento para números negativos
-    char *decodeString(char *pBits, long *resultN, int mappingOn) {
-        uint32_t count = 0;
-        uint32_t index = 0;
-
-        // Read the unary part
-        while (pBits[index] != '0' && pBits[index] != '\0') {
-            count++;
-            index++;
+    // Convert an integer to a binary string with a specified number of bits (nBitsRepresentation)
+    std::string convertToBinaryString(int num, int nBitsRepresentation){
+        std::string result = "";
+        for (int i = 0; i < nBitsRepresentation; i++) {
+            result = std::to_string(num % 2) + result;
+            num /= 2;
         }
 
-        uint32_t b = floor(log2(mDecode));
-        string key = "";
+        return result;
+    }
 
-        // Read the binary part
-        for (uint32_t i = 0; i < b; i++) {
-            index++;
-            key += pBits[index];
+
+        int bitStringToInteger(std::string bitString) {
+            int result = 0;
+            for (size_t i = 0; i < bitString.length(); i++)
+                result = result * 2 + (bitString[i] - '0');
+
+            return result;
         }
 
-        if (!key.empty()) {
-            uint32_t decimal = static_cast<uint32_t>(bitset<32>(key).to_ulong());
+    public:
+        // Constructor
+        Golomb() { }
 
-            if (!(decimal < (pow(2, (b + 1)) - mDecode))) {
-                index++;
-                key += pBits[index];
-                decimal = static_cast<uint32_t>(bitset<32>(key).to_ulong());
-                decimal = decimal - pow(2, (b + 1)) + mDecode;
-            }
+        // Decode function for a given M value
+        std::vector<int> interpretEncodedData(std::string encodedData, int m) {
+            analyzeBits(m);
+            std::vector<int> result;
+            // Bit position in the encoded data
+            int currentIndex = 0;
 
-            uint32_t result = count * mDecode + decimal;
-            *resultN = static_cast<long>(result);
-
-            // Apply the mapping for negative numbers, if necessary
-            if (mappingOn) {
-                if (result % 2 == 0) {
-                    *resultN = static_cast<long>(*resultN / -2);
-                } else {
-                    *resultN = static_cast<long>((*resultN - 1) / 2);
+            // Iterate through the encoded data
+            while((size_t) currentIndex < encodedData.length()) {
+                int quotient = 0;
+                // Count the number of 0s in the encoded data to determine the quotient (encoded in unary code)
+                while (encodedData[currentIndex] == '0') {
+                    quotient++;
+                    // Move to the next bit
+                    currentIndex++;
                 }
+                // Skip a bit (the 1 in the unary code, indicating the end of the quotient)
+                currentIndex++;
+                // Initialize the remainder 
+                int remainder = 0;
+                // Counter for the number of bits read from the encoded data in the remainder part (binary code)
+                int bitCounter = 0;
+                // Temporary string to store the remainder
+                std::string tempString = "";
+                
+                // If m is 1, the remainder is 0
+                // Otherwise, if m is 0, it's set to 1 (to prevent division by 0)
+                if (m != 1){
+                    // While the number of bits of the remainder doesn't reach minBitsCount
+                    while (bitCounter < minBitsCount) {
+                        // Add the bit to the temporary string (to obtain the remainder)
+                        tempString += encodedData[currentIndex];
+                        // Move to the next bit
+                        currentIndex++;
+                        // Move to the next bit of the remainder part (binary code)
+                        bitCounter++;
+                    }
+
+                    // Convert the temporary string to an integer to obtain the remainder
+                    int result1 = bitStringToInteger(tempString);
+
+                    // If the remainder has a value greater than the number of values with minBitsCount (corresponding to the maximum value with minBitsCount)
+                    // The next bit must be read as part of the remainder
+                    // If the value is smaller, the remainder is the value read so far
+                    if (result1 < valuesWithMinBitsCount) {
+                        remainder = result1;
+                    } else {
+                        tempString += encodedData[currentIndex];
+                        currentIndex++;
+                        // Convert the temporary string to an integer to obtain the remainder
+                        remainder = bitStringToInteger(tempString) - valuesWithMinBitsCount;
+                    }
+                } else {
+                    remainder = 0;
+                    currentIndex++;
+                }
+
+                // Resulting value without sign
+                int decodedValue = quotient * m + remainder;
+
+                // If the encoded data has a 1 at the end of the remainder, the result is negative; otherwise, it's positive
+                if (encodedData[currentIndex] == '1') {
+                    result.push_back(-(decodedValue));
+                } else {
+                    result.push_back(decodedValue);
+                }
+
+                currentIndex++;
+            }
+
+            return result;
+        }
+
+
+        // Decode function for changing M values within blocks
+        std::vector<int> interpretMultipleM(std::string encodedData, std::vector<int> mValues, int blockSize) {
+            std::vector<int> result;
+            // Bit position in the encoded data
+            int currentIndex = 0;
+            // Index for the current M value in the vector
+            int mIndex = 0;
+            // Block size bits counter
+            int bitCount = 0;
+            analyzeBits(mValues[mIndex]);
+
+            while((size_t) currentIndex < encodedData.length()) {
+                int quotient = 0;
+                // Count the number of 0s in the encoded data to determine the quotient (encoded in unary code)
+                while (encodedData[currentIndex] == '0') {
+                    quotient++;
+                    // Move to the next bit
+                    currentIndex++;
+                }
+                // Skip a bit (the 1 in the unary code, indicating the end of the quotient)
+                currentIndex++;
+                int remainder = 0;
+                // Counter for the number of bits read from the encoded data in the remainder part (binary code)
+                int bitCounter = 0;
+                std::string tempString = "";
+
+                // If the current M value is not 1, the remainder is 0;
+                // Otherwise, if the M value is 0, it's set to 1 (to prevent division by 0)
+                if (mValues[mIndex] != 1){
+                    while (bitCounter < minBitsCount) {
+                        tempString += encodedData[currentIndex];
+                        // Move to the next bit
+                        currentIndex++;
+                        // Move to the next bit of the remainder part (binary code)
+                        bitCounter++;
+                    }
+                    
+                    // Convert the temporary string to an integer to obtain the remainder
+                    int result1 = bitStringToInteger(tempString);
+
+                    // If the remainder has a value greater than the number of values with minBitsCount (corresponding to the maximum value with minBitsCount)
+                    // The next bit must be read as part of the remainder
+                    // If the value is smaller, the remainder is the value read so far
+                    if (result1 < valuesWithMinBitsCount) {
+                        remainder = result1;
+                    } else {
+                        tempString += encodedData[currentIndex];
+                        currentIndex++;
+                        // Convert the temporary string to an integer to obtain the remainder
+                        remainder = bitStringToInteger(tempString) - valuesWithMinBitsCount;
+                    }
+                } else {
+                    remainder = 0;
+                    currentIndex++;
+                }
+
+                // Resulting value without sign
+                int decodedValue = quotient * mValues[mIndex] + remainder;
+
+                // If the encoded data has a 1 at the end of the remainder, the result is negative; otherwise, it's positive
+                if (encodedData[currentIndex] == '1') {
+                    result.push_back(-(decodedValue));
+                } else {
+                    result.push_back(decodedValue);
+                }
+
+                // Move to the next bit
+                currentIndex++;
+
+                bitCount++;
+                // If the block size is reached, increment the M index
+                if (bitCount == blockSize) {
+                    // Move to the next M index
+                    mIndex++;
+                    // Reset block size bits counter
+                    bitCount = 0;
+                    analyzeBits(mValues[mIndex]);
+                }  
+            }
+            
+            return result;
+        }
+
+    // Encode an integer using Golomb coding with a specified M value
+    std::string performGolombEncoding(int number, int mValue){
+        computeBits(mValue);
+        // Resulting string
+        std::string encodedResult = "";
+        int quotient = 0;
+        int remainder = 0;
+        // If mValue isn't 0, calculate the quotient and the remainder with Golomb coding
+        if (mValue != 0){
+            quotient = abs(number) / mValue;
+            remainder = abs(number) % mValue;
+        }
+        // Concatenate the quotient in unary code 
+        for (int i = 0; i < quotient; i++) {
+            encodedResult += "0";
+        }
+
+        // Use a bit (1) to represent the end of the quotient and the beginning of the remainder
+        encodedResult += "1";
+
+        // If mValue is 1, the remainder is 0; otherwise, calculate the remainder in binary code
+        if (mValue != 1){
+            if (remainder < valuesWithMinBitsCount) {
+                encodedResult += convertToBinaryString(remainder, minBitsCount);
+            } else {
+                encodedResult += convertToBinaryString(remainder + valuesWithMinBitsCount, maxBitsCount);
             }
         } else {
-            // Handle the case where the key is empty
-            *resultN = 0;
+            encodedResult += "0";
         }
 
-        pBits += (index + 1);
-        return pBits;
-    }
+        // If the number is negative, add a 1 at the end of the remainder to indicate the sign
+        number < 0 ? encodedResult += "1" : encodedResult += "0";
 
-    // Codifica um número decimal para uma string no formato Golomb
-    // O parâmetro mappingOn indica se deve ser aplicado mapeamento para números negativos
-    string encodeNumber(int n, int mappingOn) {
-            uint32_t mapped = (mappingOn && n < 0) ? -2 * n : (2 * n) + 1;
-            string unary = encodeUnary(mapped);
-            string binary = encodeDecimal(mapped);
-
-            return unary + binary;
-        }
-
-
-
-
-    // Retorna o valor de m para codificação
-    uint32_t getEncodeParameter() {
-        return this->mEncode;
-    }
-
-    // Altera o valor de m para codificação
-    void setEncodeParameter(uint32_t m) {
-        this->mEncode = m;
-    }
-
-    // Retorna o valor de m para descodificação
-    uint32_t getDecodeParameter() {
-        return this->mDecode;
-    }
-
-    // Altera o valor de m para descodificação
-    void setDecodeParameter(uint32_t m) {
-        this->mDecode = m;
+        return encodedResult;
     }
 
 };
-
-#endif
