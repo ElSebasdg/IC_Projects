@@ -17,6 +17,8 @@ In this work, besides dealing with audio files, you will also need to manipulate
 
 3. [How to run example 2](#example_2)
 
+3. [How to run example 6](#example_6)
+
 9. [Documentation](#documentation)
 
 ## Getting Started: <a name="getting-started"></a>
@@ -122,6 +124,31 @@ To get the Opencv software running you should folow the sext steps:
 
 
 `📁 The images are stored inside the build directory`
+
+
+
+## How to run example 6: <a name="example_6"></a>
+
+1. To compile the `image_encoder.cpp` and `image_decoder.cpp` you just need to do `make` inside the build directory:
+   ```sh
+   make
+   ```
+2.  Execute the following command `./image_encoder` followed by image path and binary output file to encode the image.
+   ```sh
+   ./image_encoder ../bartolomeu.jpg bart.bin
+   ```
+3.  Execute the following command `./image_decoder` followed by binary file and the output image to decode the image.
+   ```sh
+   ./image_decoder bart.bin reconstructed-bart.jpg
+   ```
+   
+   
+`⚠️ Attention: Be careful with the image path.`
+
+
+`📁 The output binary and image files are stored inside the build directory`
+
+
 
 
 ## Documentation <a name="documentation"></a>
