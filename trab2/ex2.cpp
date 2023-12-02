@@ -1,114 +1,213 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 
-int main(int argc, char* argv[]) {
-    
+using namespace std;
+using namespace cv;
+
+Mat createNegativeImage(const Mat& original);
+void saveImage(const Mat& image, const string& filename);
+Mat createMirroredImage(const Mat& original, bool horizontally);
+void rotateImage(const Mat& original, int rotationAngle);
+void adjustIntensity(const Mat& original, int intensityValue, Mat& result);
+
+
+int main(int argc, char** argv) {
     if (argc != 4) {
-        std::cout << "Usage: " << argv[0] << "path_to_image rotation_angle light_intensity_value" << std::endl;
+        cout << "Usage: " << argv[0] << " <image_path> <rotation_angle> <intensity_value>" << endl;
         return -1;
     }
 
+    Mat originalImage = imread(argv[1], IMREAD_COLOR);
 
-    // image
-    cv::Mat img = cv::imread(argv[1], cv::IMREAD_COLOR);
-
-
-    if (img.empty()) {
-        std::cout << "Could not open or find the image at path: " << argv[1] << std::endl;
+    if (!originalImage.data) {
+        cout << "No image data." << endl;
         return -1;
     }
 
-    int rotationAngle = std::stoi(argv[2]);
+    int rotationAngle = stoi(argv[2]);
     if (rotationAngle % 90 != 0) {
-        std::cout << "Rotation angle must be a multiple of 90 degrees" << std::endl;
+        cout << "Rotation angle must be a multiple of 90 degrees." << endl;
         return -1;
     }
 
-    int light_intensity_value = std::stoi(argv[3]);
-    if (light_intensity_value < 0 || light_intensity_value > 255) {
-        std::cout << "The light intensity value must be between 0 and 255" << std::endl;
+    int intensityValue = stoi(argv[3]);
+    if (intensityValue < 0 || intensityValue > 255) {
+        cout << "The intensity value must be between 0 and 255." << endl;
         return -1;
     }
 
+    // namedWindow("Original Image", WINDOW_NORMAL);
+    // imshow("Original Image", originalImage);
 
-
-
-
-
-    // criar matris para negativo
-    cv::Mat img_negative = cv::Mat::zeros(img.size(), img.type());
-
-    // matris vertical horizontal
-    cv::Mat img_mirror_horizontal, img_mirror_vertical;
-
-    // Create new matrices to hold the modified images
-    cv::Mat img_light, img_dark;
-
-   
     // a)
-    for (int y = 0; y < img.rows; y++) {
-        for (int x = 0; x < img.cols; x++) {
-            for (int c = 0; c < img.channels(); c++) { // canais (B, G, R)
-                // Subtract the current pixel value from the maximum possible value
-                img_negative.at<cv::Vec3b>(y, x)[c] = 255 - img.at<cv::Vec3b>(y, x)[c];
+    Mat negativeImage = createNegativeImage(originalImage);
+    // namedWindow("Negative Image", WINDOW_NORMAL);
+    // imshow("Negative Image", negativeImage);
+    saveImage(negativeImage, "negative_image.jpg");
+
+    // b)
+    Mat horizontallyMirroredImage = createMirroredImage(originalImage, true);
+    Mat verticallyMirroredImage = createMirroredImage(originalImage, false);
+
+    // namedWindow("Horizontally Mirrored Image", WINDOW_NORMAL);
+    // imshow("Horizontally Mirrored Image", horizontallyMirroredImage);
+    // namedWindow("Vertically Mirrored Image", WINDOW_NORMAL);
+    // imshow("Vertically Mirrored Image", verticallyMirroredImage);
+
+    saveImage(horizontallyMirroredImage, "horizontally_mirrored_image.jpg");
+    saveImage(verticallyMirroredImage, "vertically_mirrored_image.jpg");
+
+
+    // c) 
+    rotateImage(originalImage, rotationAngle);
+
+    // d)
+    Mat lightenedImage, darkenedImage;
+
+    adjustIntensity(originalImage, intensityValue, lightenedImage);
+    adjustIntensity(originalImage, -intensityValue, darkenedImage);
+
+    string lightenedOutputFileName = "lightened.jpg";
+    string darkenedOutputFileName = "darkened.jpg";
+
+    imwrite(lightenedOutputFileName, lightenedImage);
+    imwrite(darkenedOutputFileName, darkenedImage);
+
+    // namedWindow("Lightened Image", WINDOW_NORMAL);
+    // imshow("Lightened Image", lightenedImage);
+
+    // namedWindow("Darkened Image", WINDOW_NORMAL);
+    // imshow("Darkened Image", darkenedImage);
+
+    cout << "Lightened image saved as: " << lightenedOutputFileName << endl;
+    cout << "Darkened image saved as: " << darkenedOutputFileName << endl;
+
+    waitKey(0);
+    destroyAllWindows();
+
+    return 0;
+}
+
+
+void saveImage(const Mat& image, const string& filename) {
+    imwrite(filename, image);
+    cout << "Image saved as: " << filename << endl;
+}
+
+
+Mat createNegativeImage(const Mat& original) {
+    Mat negativeImage = original.clone();
+    
+    for (int y = 0; y < original.rows; ++y) {
+        for (int x = 0; x < original.cols; ++x) {
+            Vec3b& pixel = negativeImage.at<Vec3b>(y, x);
+
+            // Invert RGB values
+            pixel[0] = 255 - pixel[0]; // Blue
+            pixel[1] = 255 - pixel[1]; // Green
+            pixel[2] = 255 - pixel[2]; // Red
+        }
+    }
+
+    return negativeImage;
+}
+
+Mat createMirroredImage(const Mat& original, bool horizontally) {
+    Mat mirroredImage = Mat::zeros(original.size(), original.type());
+
+    for (int y = 0; y < original.rows; ++y) {
+        for (int x = 0; x < original.cols; ++x) {
+            int newX, newY;
+
+            if (horizontally) {
+                newX = original.cols - x - 1;
+                newY = y;
+            } else { // vertically
+                newX = x;
+                newY = original.rows - y - 1;
+            }
+
+            mirroredImage.at<Vec3b>(newY, newX) = original.at<Vec3b>(y, x);
+        }
+    }
+
+    return mirroredImage;
+}
+
+
+void rotateImage(const Mat& original, int rotationAngle) {
+    int rows = original.rows;
+    int cols = original.cols;
+
+    Mat rotatedImage(rows, cols, original.type());
+
+    switch (rotationAngle) {
+        case 90:
+            for (int y = 0; y < rows; ++y) {
+                for (int x = 0; x < cols; ++x) {
+                    rotatedImage.at<Vec3b>(x, rows - y - 1) = original.at<Vec3b>(y, x);
+                }
+            }
+            break;
+        case 180:
+            for (int y = 0; y < rows; ++y) {
+                for (int x = 0; x < cols; ++x) {
+                    rotatedImage.at<Vec3b>(rows - y - 1, cols - x - 1) = original.at<Vec3b>(y, x);
+                }
+            }
+            break;
+        case 270:
+            for (int y = 0; y < rows; ++y) {
+                for (int x = 0; x < cols; ++x) {
+                    rotatedImage.at<Vec3b>(cols - x - 1, y) = original.at<Vec3b>(y, x);
+                }
+            }
+            break;
+        case -90:
+            for (int y = 0; y < rows; ++y) {
+                for (int x = 0; x < cols; ++x) {
+                    rotatedImage.at<Vec3b>(cols - x - 1, y) = original.at<Vec3b>(y, x);
+                }
+            }
+            break;
+        case -180:
+            for (int y = 0; y < rows; ++y) {
+                for (int x = 0; x < cols; ++x) {
+                    rotatedImage.at<Vec3b>(rows - y - 1, cols - x - 1) = original.at<Vec3b>(y, x);
+                }
+            }
+            break;
+        case -270:
+            for (int y = 0; y < rows; ++y) {
+                for (int x = 0; x < cols; ++x) {
+                    rotatedImage.at<Vec3b>(x, rows - y - 1) = original.at<Vec3b>(y, x);
+                }
+            }
+            break;
+        default:
+            cout << "Invalid rotation angle." << endl;
+            return;
+    }
+
+    string outputFileName = "rotated_" + to_string(rotationAngle) + ".jpg";
+    imwrite(outputFileName, rotatedImage);
+
+    namedWindow("Rotated Image", WINDOW_NORMAL);
+    imshow("Rotated Image", rotatedImage);
+
+    cout << "Rotated image saved as: " << outputFileName << endl;
+}
+
+
+void adjustIntensity(const Mat& original, int intensityValue, Mat& result) {
+    result = Mat::zeros(original.size(), original.type());
+
+    for (int y = 0; y < original.rows; ++y) {
+        for (int x = 0; x < original.cols; ++x) {
+            for (int c = 0; c < original.channels(); ++c) {
+                int newValue = original.at<Vec3b>(y, x)[c] + intensityValue;
+                result.at<Vec3b>(y, x)[c] = saturate_cast<uchar>(newValue);
             }
         }
     }
-    cv::imwrite("negative_image.jpg", img_negative);
-
-    // b)
-    cv::flip(img, img_mirror_horizontal, 1);
-    cv::flip(img, img_mirror_vertical, 0);
-
-    // Save the mirrored images
-    cv::imwrite("mirror_horizontal.jpg", img_mirror_horizontal);
-    cv::imwrite("mirror_vertical.jpg", img_mirror_vertical);
-
-
-
-    // c)
-    cv::Mat img_rotated_minus_90, img_rotated_minus_180, img_rotated_minus_270, img_rotated_90, img_rotated_180, img_rotated_270;
-    switch(rotationAngle){
-        case 90:
-            // Rotate the image 90 degrees
-            cv::rotate(img, img_rotated_90, cv::ROTATE_90_CLOCKWISE);
-            cv::imwrite("rotated_90.jpg", img_rotated_90);
-            break;
-        case 180:
-            // Rotate the image 180 degrees
-            cv::rotate(img, img_rotated_180, cv::ROTATE_180);
-            cv::imwrite("rotated_180.jpg", img_rotated_180);
-            break;
-        case 270:
-            // Rotate the image 270 degrees clockwise
-            cv::rotate(img, img_rotated_270, cv::ROTATE_90_COUNTERCLOCKWISE);
-            cv::imwrite("rotated_270.jpg", img_rotated_270);
-            break;
-
-        case -90:
-            // Rotate the image -90
-            cv::rotate(img, img_rotated_minus_90, cv::ROTATE_90_COUNTERCLOCKWISE);
-            // Save the rotated images
-            cv::imwrite("rotated_minus_90.jpg", img_rotated_minus_90);
-            break;
-        case -180:
-            // Rotate the image -180 degrees
-            cv::rotate(img, img_rotated_minus_180, cv::ROTATE_180);
-            cv::imwrite("rotated_minus_180.jpg", img_rotated_minus_180);
-            break;
-        case -270:
-            // Rotate the image -270 degrees
-            cv::rotate(img, img_rotated_minus_270, cv::ROTATE_90_CLOCKWISE);
-            cv::imwrite("rotated_minus_270.jpg", img_rotated_minus_270);
-            break;
-    }
-
-    // d)
-    img.convertTo(img_light, -1, 1, light_intensity_value);
-    img.convertTo(img_dark, -1, 1, -light_intensity_value);
-
-    // Save the modified images
-    cv::imwrite("ligh_image.jpg", img_light);
-    cv::imwrite("dark_image.jpg", img_dark);
-    return 0;
 }
