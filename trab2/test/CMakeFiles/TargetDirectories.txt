@@ -1,3 +1,0 @@
-/home/sebastian/Desktop/IC/trab2/test/CMakeFiles/DisplayImage.dir
-/home/sebastian/Desktop/IC/trab2/test/CMakeFiles/edit_cache.dir
-/home/sebastian/Desktop/IC/trab2/test/CMakeFiles/rebuild_cache.dir
