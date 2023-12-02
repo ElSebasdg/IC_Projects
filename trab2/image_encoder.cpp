@@ -1,4 +1,4 @@
-#include "golomb.h"
+#include "new_golomb.h"
 #include <iostream>
 #include <string>
 #include <string.h>

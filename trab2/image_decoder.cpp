@@ -1,4 +1,4 @@
-#include "golomb.h"
+#include "new_golomb.h"
 #include <iostream>
 #include <string>
 #include <string.h>
@@ -67,12 +67,8 @@ for (int i = 0; i < msize; i++) {
     
     Golomb g;
     vector<int> decoded;
-
-    if (msize == 1) {
-        decoded = g.decode(encodedString, m_vector[0]);
-    } else {
-        decoded = g.decodeMultiple(encodedString, m_vector, imgwidth);
-    }
+    
+    decoded = g.decode(encodedString, m_vector, imgwidth);
 
     //undo the predictions
     int pixel_idx = 0;
