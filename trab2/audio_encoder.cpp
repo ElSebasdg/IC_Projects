@@ -12,12 +12,22 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 
-    //function to calculate m based on p
-    auto calc_m = [](int p) {
-        //p = alpha / 1 - alpha
-        //m = - (1 / log(alpha))
-        return (int) - (1/log((double) p / (1 + p)));
+    // Function to calculate m based on p and bitrate target 
+    auto calc_m = [](int p, double bitrateTarget = 0.0) {
+        if (bitrateTarget == 0.0) {
+            // If bitrate target is not provided
+            // Example default value:
+            bitrateTarget = 128.0; 
+        }
+
+        // Convert bitrate target to an alpha factor
+        double alpha = bitrateTarget / (1.0 + bitrateTarget);
+
+        // Calculate m based on p and alpha
+        return static_cast<int>(-1.0 / log(static_cast<double>(p) / (1.0 + static_cast<double>(p) + alpha)));
     };
+
+
 
     auto predict = [](int a, int b, int c) {    //x(n) = 3*x(n-1) - 3*x(n-2) + x(n-3)
         return 3*a - 3*b + c;
@@ -62,10 +72,6 @@ int main(int argc, char *argv[]) {
             break;
         }
 	
-
-    
-    
-
     //start a timer
     clock_t start = clock();
     
@@ -131,7 +137,7 @@ int main(int argc, char *argv[]) {
                         sum += abs(valuesToBeEncoded[j]);
                     }
                     int p = round(sum / bs);
-                    int m = calc_m(p);
+                    int m = calc_m(p, br);
                     if (m < 1) m = 1;
                     m_vector.push_back(m);
                 }
@@ -141,7 +147,7 @@ int main(int argc, char *argv[]) {
                         sum += abs(valuesToBeEncoded[j]);
                     }
                     int p = round(sum / (i % bs));
-                    int m = calc_m(p);
+                    int m = calc_m(p, br);
                     if (m < 1) m = 1;
                     m_vector.push_back(m);
                 }
