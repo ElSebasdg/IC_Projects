@@ -17,9 +17,9 @@ In this work, besides dealing with audio files, you will also need to manipulate
 
 3. [How to run example 2](#example_2)
 
-4. [How to run example 6](#example_4)
+4. [How to run example 4](#example_4)
 
-5. [How to run example 6](#example_5)
+5. [How to run example 5](#example_5)
 
 9. [Documentation](#documentation)
 
