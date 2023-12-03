@@ -17,7 +17,9 @@ In this work, besides dealing with audio files, you will also need to manipulate
 
 3. [How to run example 2](#example_2)
 
-3. [How to run example 6](#example_6)
+4. [How to run example 6](#example_4)
+
+5. [How to run example 6](#example_5)
 
 9. [Documentation](#documentation)
 
@@ -146,7 +148,7 @@ To get the Opencv software running you should folow the sext steps:
 `📁 The output binary and audio files are stored inside the build directory`
   
 
-## How to run example 6: <a name="example_6"></a>
+## How to run example 5: <a name="example_5"></a>
 
 1. To compile the `image_encoder.cpp` and `image_decoder.cpp` you just need to do `make` inside the build directory:
    ```sh
