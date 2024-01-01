@@ -10,6 +10,12 @@ target_link_libraries( image_encoder ${OpenCV_LIBS} )
 add_executable(image_decoder image_decoder.cpp)
 target_link_libraries( image_decoder ${OpenCV_LIBS} )
 
+add_executable(intra_encoder intra_encoder.cpp)
+target_link_libraries( intra_encoder ${OpenCV_LIBS} )
+
+add_executable(intra_decoder intra_decoder.cpp)
+target_link_libraries( intra_decoder ${OpenCV_LIBS} )
+
 
 
 

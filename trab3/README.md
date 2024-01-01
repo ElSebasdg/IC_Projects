@@ -12,6 +12,8 @@ Lab class number 3.
 
 2. [How to run example 1](#example_1)
 
+3. [How to run example 2](#example_2)
+
 9. [Documentation](#documentation)
 
 ## Getting Started: <a name="getting-started"></a>
@@ -93,6 +95,21 @@ To get the Opencv software running you should folow the sext steps:
    ./image_decoder bart.bin reconstructed-bart.jpg
    ```
    
+## How to run example 2: <a name="example_2"></a>
+
+1. To compile the `intra_encoder.cpp` and `intra_decoder.cpp` you just need to do `make` inside the build directory:
+   ```sh
+   make
+   ```
+2.  Execute the following command `./intra_encoder` followed by video (y4m file) path and binary output file to encode the video.
+   ```sh
+   ./intra_encoder ../akiyo-cif.y4m akiyo.bin
+   ```
+3.  Execute the following command `./intra_decoder` followed by binary file and the output video (y4m file) to decode the video.
+   ```sh
+   ./intra_decoder akiyo.bin reconstructed-akiyo.y4m
+   ```
+ 
    
 `⚠️ Attention: Be careful with the image path.`
 
@@ -102,5 +119,5 @@ To get the Opencv software running you should folow the sext steps:
 
 ## Documentation <a name="documentation"></a>
 
-[Lab work n◦2](https://elearning.ua.pt/pluginfile.php/4438659/mod_resource/content/2/trab2.pdf)
+[Lab work n◦3](https://elearning.ua.pt/pluginfile.php/4438659/mod_resource/content/2/trab2.pdf)
 
