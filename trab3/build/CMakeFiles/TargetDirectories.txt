@@ -1,6 +1,0 @@
-/home/sebastian/Desktop/IC/trab3/build/CMakeFiles/image_encoder.dir
-/home/sebastian/Desktop/IC/trab3/build/CMakeFiles/image_decoder.dir
-/home/sebastian/Desktop/IC/trab3/build/CMakeFiles/intra_encoder.dir
-/home/sebastian/Desktop/IC/trab3/build/CMakeFiles/intra_decoder.dir
-/home/sebastian/Desktop/IC/trab3/build/CMakeFiles/edit_cache.dir
-/home/sebastian/Desktop/IC/trab3/build/CMakeFiles/rebuild_cache.dir
